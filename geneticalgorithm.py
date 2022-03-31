@@ -67,3 +67,51 @@ def evolve(pop,budget):
     parents.extend(children)
     
     return parents
+
+value_list = []
+fitness_history = []
+
+budget = 3000
+day = 4 
+spot = 6
+trans = 5
+newGeneration = 1000
+
+#create a list of 1000 elements
+pop = population(1000,4,budget)
+
+for i in range(newGeneration):
+    p = evolve(pop,budget)
+    value = fitness(p[0],budget)
+    fitness_history.append(value)
+    value_list.append(p[0])
+    value_list.append(value)
+    
+# select the last element as the result
+count = 0
+for i in value_list:
+    if (count == len(value_list)-2):
+        finalPlan = i
+    count += 1
+    
+# print the result in table form
+from tabulate import tabulate
+
+strBudget =  "RM "+str(budget)
+strDay = str(day)+" days"
+hotelPrice = "RM "+str(round(finalPlan[0]/day))
+strSpots = str(spot)+" spots"
+strPricePerSpot = "RM "+str(round(finalPlan[1]/spot))
+strFoodPrice = "RM "+str(round(finalPlan[2]/3/day))+" per meal"
+strTransportFee = "RM "+str(round(finalPlan[2]/trans/day))+" per trip"
+strTransportNum = str(trans)+" trip per day"
+
+print("------------------------------------------")
+content = [["Money on hand", strBudget], ["Vacation Duration", day], ["Hotel price per night", hotelPrice], 
+           ["Tourist Spots", strSpots], ["Price per spot", strPricePerSpot ], ["Food Price", strFoodPrice],
+          ["Transportation fees", strTransportFee],["Transport Frequency", strTransportNum]]
+table = tabulate(content, headers=['Parameter', 'Value'], tablefmt='orgtbl')
+
+print(table)
+print("------------------------------------------")
+
